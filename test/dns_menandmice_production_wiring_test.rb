@@ -6,22 +6,31 @@ class DnsMenandmiceProductionWiringTest < Test::Unit::TestCase
   def setup
     @container = ::Proxy::DependencyInjection::Container.new
     @config = ::Proxy::Dns::Menandmice::PluginConfiguration.new
+
+    stub_request(:post, "https://test.example.com/_mmwebext/mmwebext.dll?Soap").
+        with(body: "{\"jsonrpc\":\"2.0\",\"method\":\"Login\",\"params\":{\"loginName\":\"example\\\\user\",\"password\":\"hunter12\",\"server\":\"test.example.com\"}}",
+             headers: {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+        to_return(status: 200, body: mm_response({session: 123}, nil, 123), headers: {})
   end
 
   def test_dns_provider_initialization
-    @config.load_dependency_injection_wirings(@container, :dns_ttl => 999,
-                                              :example_setting => 'a_value',
-                                              :required_setting => 'required_value',
-                                              :optional_path => '/some/path',
-                                              :required_path => '/required/path')
+    @config.load_dependency_injection_wirings(@container,
+                                              :server => "test.example.com",
+                                              :username => "example\\user",
+                                              :password => "hunter12",
+                                              :dns_ttl => 999,
+                                              :ssl => true,
+                                              :verify_ssl => true,
+                                            )
 
     provider = @container.get_dependency(:dns_provider)
 
     assert_not_nil provider
-    assert_equal 'a_value', provider.example_setting
-    assert_equal 'required_value', provider.required_setting
-    assert_equal '/some/path', provider.optional_path
-    assert_equal '/required/path', provider.required_path
+    assert_equal 'test.example.com', provider.server
+    assert_equal 'example\\user', provider.username
+    assert_equal 'hunter12', provider.password
+    assert_equal true, provider.ssl
+    assert_equal true, provider.verify_ssl
     assert_equal 999, provider.ttl
   end
 end

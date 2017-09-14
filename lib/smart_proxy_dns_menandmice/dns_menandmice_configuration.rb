@@ -8,11 +8,13 @@ module ::Proxy::Dns::Menandmice
     def load_dependency_injection_wirings(container_instance, settings)
       container_instance.dependency :dns_provider, (lambda do
         ::Proxy::Dns::Menandmice::Record.new(
-            settings[:required_setting],
-            settings[:example_setting],
-            settings[:required_path],
-            settings[:optional_path],
-            settings[:dns_ttl])
+            settings[:server],
+            settings[:username],
+            settings[:password],
+            settings[:dns_ttl],
+            settings[:ssl],
+            settings[:verify_ssl],
+            settings[:mock_login])
       end)
     end
   end

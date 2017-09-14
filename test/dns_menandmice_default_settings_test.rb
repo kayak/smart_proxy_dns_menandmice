@@ -5,7 +5,8 @@ require 'smart_proxy_dns_menandmice/dns_menandmice_plugin'
 class DnsMenandmiceDefaultSettingsTest < Test::Unit::TestCase
   def test_default_settings
     Proxy::Dns::Menandmice::Plugin.load_test_settings({})
-    assert_equal "default_value", Proxy::Dns::Menandmice::Plugin.settings.required_setting
-    assert_equal "/must/exist", Proxy::Dns::Menandmice::Plugin.settings.required_path
+    assert_equal "127.0.0.1", Proxy::Dns::Menandmice::Plugin.settings.server
+    assert_equal "username", Proxy::Dns::Menandmice::Plugin.settings.username
+    assert_equal "password", Proxy::Dns::Menandmice::Plugin.settings.password
   end
 end
