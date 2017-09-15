@@ -1,5 +1,7 @@
 # Men & Mice Smart Proxy DNS Plugin
 
+[![Build Status](https://travis-ci.org/kayak/smart_proxy_dns_menandmice.svg?branch=master)](https://travis-ci.org/kayak/smart_proxy_dns_menandmice)
+
 This plugin adds a new DNS provider for managing records in [Men & Mice](https://www.menandmice.com)
 
 The Men & Mice Web Services package must be installed to access the API features of Men & Mice. See the Men & Mice [documentation](https://docs.menadnmice.com/) for information on how to install web services.
