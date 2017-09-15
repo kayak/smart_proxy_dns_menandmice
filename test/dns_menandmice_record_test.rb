@@ -14,7 +14,6 @@ class DnsMenandmiceRecordTest < Test::Unit::TestCase
 
   # Test A record creation
   def test_create_a
-    # Use mocha to expect any calls to backend services to prevent creating real records
     @provider.expects(:do_create)
         .with('test.example.com', '10.1.1.1', 'A').returns(true)
     assert @provider.do_create('test.example.com', '10.1.1.1', 'A')
