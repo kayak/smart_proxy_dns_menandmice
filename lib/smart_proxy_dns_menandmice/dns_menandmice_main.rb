@@ -41,7 +41,7 @@ module Proxy::Dns::Menandmice
       record_filter = "name:^#{name.split(".").first}$ type:#{type}"
       response = @client.get_dns_records(filter: record_filter, dns_zone_ref: zone.ref)
       if response.total_results == 0
-        raise Proxy::Dns::Error.new("Failed to remove #{name} of type #{type}")
+        raise Proxy::Dns::NotFound.new("Failed to remove #{name} of type #{type}")
       end
       record = response.dns_records.first
       @client.remove_object(ref: record.ref, obj_type: 'DNSRecord')
