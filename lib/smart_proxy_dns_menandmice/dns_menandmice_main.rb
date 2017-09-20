@@ -9,7 +9,7 @@ module Proxy::Dns::Menandmice
 
     def initialize(client, dns_ttl = nil)
       @client = client
-      super(@client.instance_variable_get(:@options)[:server], dns_ttl)
+      super('localhost', dns_ttl)
     end
 
     def do_create(name, value, type)
@@ -18,7 +18,7 @@ module Proxy::Dns::Menandmice
                                            data: value, enabled: true,
                                            dns_zone_ref: zone.ref)
       response = @client.add_dns_record(dns_record: record)
-      raise Proxy::Dns::Error.new("Failed to point #{name} to #{value} with type #{type}") unless response
+      raise Proxy::Dns::Error.new("Failed to point #{name} to #{value} with type #{type}") unless response.ref
       response
     end
 

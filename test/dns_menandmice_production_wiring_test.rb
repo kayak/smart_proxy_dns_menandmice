@@ -8,8 +8,7 @@ class DnsMenandmiceProductionWiringTest < Test::Unit::TestCase
     @config = ::Proxy::Dns::Menandmice::PluginConfiguration.new
 
     stub_request(:post, "https://test.example.com/_mmwebext/mmwebext.dll?Soap").
-        with(body: "{\"jsonrpc\":\"2.0\",\"method\":\"Login\",\"params\":{\"loginName\":\"example\\\\user\",\"password\":\"hunter12\",\"server\":\"test.example.com\"}}",
-             headers: {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+        with(body: "{\"jsonrpc\":\"2.0\",\"method\":\"Login\",\"params\":{\"loginName\":\"example\\\\user\",\"password\":\"hunter12\",\"server\":\"test.example.com\"}}").
         to_return(status: 200, body: mm_response({session: 123}, nil, 123), headers: {})
   end
 

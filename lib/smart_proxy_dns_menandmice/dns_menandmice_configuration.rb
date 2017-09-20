@@ -5,7 +5,6 @@ module ::Proxy::Dns::Menandmice
     def load_classes
       require 'dns_common/dns_common'
       require 'smart_proxy_dns_menandmice/dns_menandmice_main'
-      include Proxy::Log
     end
 
     def load_dependency_injection_wirings(container_instance, settings)
