@@ -3,10 +3,6 @@ require 'smart_proxy_dns_menandmice/dns_menandmice_main'
 
 class DnsMenandmiceRecordTest < Test::Unit::TestCase
   def setup
-    stub_request(:post, "http://localhost/_mmwebext/mmwebext.dll?Soap").
-        with(body: "{\"jsonrpc\":\"2.0\",\"method\":\"Login\",\"params\":{\"loginName\":\"a_username\",\"password\":\"a_password\",\"server\":\"localhost\"}}").
-        to_return(status: 200, body: mm_response({session: 123}, nil, 123))
-
     client = MmJsonClient::Client.new({:server => "test.example.com",
                                               :username => "example\\user",
                                               :password => "hunter12",
