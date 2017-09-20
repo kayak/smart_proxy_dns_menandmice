@@ -7,9 +7,7 @@ class DnsMenandmiceProductionWiringTest < Test::Unit::TestCase
     @container = ::Proxy::DependencyInjection::Container.new
     @config = ::Proxy::Dns::Menandmice::PluginConfiguration.new
 
-    stub_request(:post, "https://test.example.com/_mmwebext/mmwebext.dll?Soap").
-        with(body: "{\"jsonrpc\":\"2.0\",\"method\":\"Login\",\"params\":{\"loginName\":\"example\\\\user\",\"password\":\"hunter12\",\"server\":\"test.example.com\"}}").
-        to_return(status: 200, body: mm_response({session: 123}, nil, 123), headers: {})
+    MmJsonClient::Client.any_instance.stubs(:login => stubs(:session => 123))
   end
 
   def test_dns_provider_initialization
