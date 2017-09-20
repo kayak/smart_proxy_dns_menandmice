@@ -5,25 +5,11 @@ module Proxy::Dns::Menandmice
   class Record < ::Proxy::Dns::Record
     include Proxy::Log
 
-    attr_reader :server, :username, :password, :ssl, :verify_ssl
+    attr_reader :client, :dns_ttl
 
-    def initialize(server, username, password, dns_ttl = nil, ssl = false, verify_ssl = false, mock_login = false)
-      @server = server
-      @username = username
-      @password = password
-      @ssl =  ssl
-      @verify_ssl = verify_ssl
-
-      @client = MmJsonClient::Client.new(server: @server,
-                                         username: @username,
-                                         password: @password,
-                                         ssl: @ssl,
-                                         verify_ssl: @verify_ssl
-                                        )
-
-      @client.login unless mock_login
-
-      super(server, dns_ttl)
+    def initialize(client, dns_ttl = nil)
+      @client = client
+      super(@client.instance_variable_get(:@options)[:server], dns_ttl)
     end
 
     def do_create(name, value, type)

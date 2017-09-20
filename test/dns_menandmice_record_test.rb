@@ -6,7 +6,18 @@ class DnsMenandmiceRecordTest < Test::Unit::TestCase
     stub_request(:post, "http://localhost/_mmwebext/mmwebext.dll?Soap").
         with(body: "{\"jsonrpc\":\"2.0\",\"method\":\"Login\",\"params\":{\"loginName\":\"a_username\",\"password\":\"a_password\",\"server\":\"localhost\"}}").
         to_return(status: 200, body: mm_response({session: 123}, nil, 123))
-    @provider = Proxy::Dns::Menandmice::Record.new('localhost', 'a_username', 'a_password')
+
+    @container = ::Proxy::DependencyInjection::Container.new
+    @config = ::Proxy::Dns::Menandmice::PluginConfiguration.new
+    @config.load_dependency_injection_wirings(@container,
+                                              :server => "test.example.com",
+                                              :username => "example\\user",
+                                              :password => "hunter12",
+                                              :dns_ttl => 999,
+                                              :ssl => true,
+                                              :verify_ssl => true,
+    )
+    provider = @container.get_dependency(:dns_provider)
   end
 
   # These tests are very verbose and possibly a lot of duplication, but it is a

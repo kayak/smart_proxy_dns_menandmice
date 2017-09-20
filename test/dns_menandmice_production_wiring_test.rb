@@ -26,11 +26,11 @@ class DnsMenandmiceProductionWiringTest < Test::Unit::TestCase
     provider = @container.get_dependency(:dns_provider)
 
     assert_not_nil provider
-    assert_equal 'test.example.com', provider.server
-    assert_equal 'example\\user', provider.username
-    assert_equal 'hunter12', provider.password
-    assert_equal true, provider.ssl
-    assert_equal true, provider.verify_ssl
+    options = provider.client.instance_variable_get(:@options)
+    assert_equal 'test.example.com', options[:server]
+    assert_equal 'example\\user', options[:username]
+    assert_equal true, options[:ssl]
+    assert_equal true, options[:verify_ssl]
     assert_equal 999, provider.ttl
   end
 end
