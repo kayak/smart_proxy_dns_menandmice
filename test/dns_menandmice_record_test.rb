@@ -7,21 +7,14 @@ class DnsMenandmiceRecordTest < Test::Unit::TestCase
         with(body: "{\"jsonrpc\":\"2.0\",\"method\":\"Login\",\"params\":{\"loginName\":\"a_username\",\"password\":\"a_password\",\"server\":\"localhost\"}}").
         to_return(status: 200, body: mm_response({session: 123}, nil, 123))
 
-    @container = ::Proxy::DependencyInjection::Container.new
-    @config = ::Proxy::Dns::Menandmice::PluginConfiguration.new
-    @config.load_dependency_injection_wirings(@container,
-                                              :server => "test.example.com",
+    client = MmJsonClient::Client.new({:server => "test.example.com",
                                               :username => "example\\user",
                                               :password => "hunter12",
-                                              :dns_ttl => 999,
                                               :ssl => true,
-                                              :verify_ssl => true,
-    )
-    provider = @container.get_dependency(:dns_provider)
+                                              :verify_ssl => true
+                                      })
+    @provider = ::Proxy::Dns::Menandmice::Record.new(client, 999)
   end
-
-  # These tests are very verbose and possibly a lot of duplication, but it is a
-  # somewhat complete overview of the possible inputs.
 
   # Test A record creation
   def test_create_a
