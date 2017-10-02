@@ -29,7 +29,7 @@ class DnsMenandmiceRecordTest < Test::Unit::TestCase
     @provider.expects(:create_dns_record).with(has_entries(args)).returns(record)
     @client.expects(:add_dns_record).with(has_entry(:dns_record, record)).returns(@response)
 
-    assert_equal response,@provider.do_create(expected_name, expected_address, expected_type)
+    assert_equal @response,@provider.do_create(expected_name, expected_address, expected_type)
   end
 
   # Test AAAA record creation
@@ -44,7 +44,7 @@ class DnsMenandmiceRecordTest < Test::Unit::TestCase
     @provider.expects(:create_dns_record).with(has_entries(args)).returns(record)
     @client.expects(:add_dns_record).with(has_entry(:dns_record, record)).returns(@response)
 
-    assert @provider.do_create(expected_name, expected_address, expected_type)
+    assert_equal @response, @provider.do_create(expected_name, expected_address, expected_type)
   end
 
   # Test PTR record creation with an IPv4 address
@@ -59,7 +59,7 @@ class DnsMenandmiceRecordTest < Test::Unit::TestCase
     @provider.expects(:create_dns_record).with(has_entries(args)).returns(record)
     @client.expects(:add_dns_record).with(has_entry(:dns_record, record)).returns(@response)
 
-    assert @provider.do_create(expected_name, expected_address, expected_type)
+    assert_equal @response, @provider.do_create(expected_name, expected_address, expected_type)
   end
 
   # Test PTR record creation with an IPv6 address
@@ -74,7 +74,7 @@ class DnsMenandmiceRecordTest < Test::Unit::TestCase
     @provider.expects(:create_dns_record).with(has_entries(args)).returns(record)
     @client.expects(:add_dns_record).with(has_entry(:dns_record, record)).returns(@response)
 
-    assert @provider.do_create(expected_name, expected_address, expected_type)
+    assert_equal @response,@provider.do_create(expected_name, expected_address, expected_type)
   end
 
   # Test CNAME record creation
@@ -90,7 +90,7 @@ class DnsMenandmiceRecordTest < Test::Unit::TestCase
     @provider.expects(:create_dns_record).with(has_entries(args)).returns(record)
     @client.expects(:add_dns_record).with(has_entry(:dns_record, record)).returns(@response)
 
-    assert_equal response,@provider.do_create(expected_name, expected_address, expected_type)
+    assert_equal @response,@provider.do_create(expected_name, expected_address, expected_type)
   end
 
   # Test A record removal
