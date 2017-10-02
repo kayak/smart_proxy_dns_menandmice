@@ -14,9 +14,9 @@ module Proxy::Dns::Menandmice
 
     def do_create(name, value, type)
       zone = match_zone(name, enum_zones)
-      record = MmJsonClient::DNSRecord.new(name: "#{name}.", type: type, ttl: @dns_ttl,
-                                           data: value, enabled: true,
-                                           dns_zone_ref: zone.ref)
+
+      args = generate_args(name, type, value, zone)
+      record = create_dns_record(args)
       response = @client.add_dns_record(dns_record: record)
       raise Proxy::Dns::Error.new("Failed to point #{name} to #{value} with type #{type}") unless response.ref
       response
@@ -24,8 +24,8 @@ module Proxy::Dns::Menandmice
 
     def do_remove(name, type)
       zone = match_zone(name, enum_zones)
-      record_filter = "name:^#{name.split(".").first}$ type:#{type}"
-      response = @client.get_dns_records(filter: record_filter, dns_zone_ref: zone.ref)
+      record_filter = generate_filter_args(name, type, zone)
+      response = @client.get_dns_records(record_filter)
       if response.total_results == 0
         raise Proxy::Dns::NotFound.new("Failed to remove #{name} of type #{type}")
       end
@@ -63,5 +63,26 @@ module Proxy::Dns::Menandmice
       zones
     end
 
+    def create_dns_record(*args)
+      MmJsonClient::DNSRecord.new(*args)
+    end
+
+    def generate_args(name, type, value, zone)
+      {
+          :name => "#{name}.",
+          :type => type,
+          :ttl => @ttl,
+          :data => value,
+          :enabled => true,
+          :dns_zone_ref => zone.ref
+      }
+    end
+
+    def generate_filter_args(name, type, zone)
+      {
+          :filter => "name:^#{name.split(zone.name).first.chop}$ type:#{type}",
+          :dns_zone_ref => zone.ref
+      }
+    end
   end
 end
